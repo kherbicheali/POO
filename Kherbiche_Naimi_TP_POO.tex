@@ -1,0 +1,146 @@
+\documentclass[12pt, a4paper, openany]{report}
+\def\VersionRapport{1.0}
+\usepackage[utf8]{inputenc} % un package
+\usepackage[T1]{fontenc}      % un second package
+\usepackage[francais]{babel}  % un troisième package
+\usepackage{layout}
+\usepackage[top=2.7cm, bottom=2.5cm, left=3.5cm, right=3cm]{geometry}
+\usepackage{setspace}
+\frenchbsetup{StandardLists=true} % à inclure si on utilise \usepackage[french]{babel}
+%\usepackage{enumitem}
+\usepackage[shortlabels]{enumitem}
+\usepackage{amssymb}
+\usepackage{color}
+\usepackage{listings}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\definecolor{rougecerise}{rgb}{0.73,0.043,0.043}
+\lstset{frame=tb,
+  language=C++,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  morecomment=[l][\color{magenta}]{\#},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3,
+  breaklines=true,
+  morekeywords={matlab2tikz},
+  morekeywords=[2]{1}, 
+  keywordstyle=[2]{\color{black}},
+  identifierstyle=\color{black},
+  numbers=left,
+  numberstyle={\tiny \color{black}},
+  numbersep=9pt, 
+  emph=[1]{for,end,break},
+  emphstyle=[1]\color{red}
+}
+%\lstset{language=C++,
+%                keywordstyle=\color{blue},
+%                stringstyle=\color{red},
+%                commentstyle=\color{green},
+%                morecomment=[l][\color{magenta}]{\#}
+%}
+\usepackage{multirow} % pour les tableaux
+\usepackage[table]{xcolor} % pour les tableaux
+\usepackage{verbatim}
+%\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{moreverb}
+\usepackage{url}
+\usepackage{pst-all}
+\usepackage{eso-pic,graphicx}
+\usepackage{caption} 
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=red]{hyperref}
+\usepackage{array}
+\usepackage[toc,page]{appendix}
+\usepackage[off]{auto-pst-pdf}
+\usepackage{hyperref} % pour le sommaire table des matières
+\AddThinSpaceBeforeFootnotes % à insérer si on utilise \usepackage[french]{babel}
+\FrenchFootnotes % à insérer si on utilise \usepackage[french]{babel}
+\usepackage{fancyhdr}
+\pagestyle{headings}
+\usepackage{pifont}  %pour les puces
+\usepackage{amsmath} %pour les puces
+\usepackage{subfig}
+\usepackage{verbatim} % pour le code en annexe 
+%%%%%%%colones 
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash }b{#1}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash }b{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash }b{#1}}
+%%%%%%% 
+\renewcommand{\appendixpagename}{Annexes}
+\renewcommand{\appendixtocname}{Annexes}
+\title{Theme: Compte Rendu Conception Orientée Objet des Systèmes de Commande}
+\author{NAIMI \bsc{Nabil} \\ KHERBICHE \bsc{Ali}}
+\date{2018-2019}
+%new
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\begin{document}
+
+%\selectlanguage{francais}
+\pagenumbering{arabic} 
+\makeatletter
+\begin{titlepage}
+\begin{sffamily}
+\begin{center}
+    % Upper part of the page. The '~' is needed because \\
+    % only works if a paragraph has started.
+    \includegraphics[scale=0.5]{Logo_UT3.jpg}~\\[1cm]
+    \textsc{\LARGE M1 ISTR-RODECO  }\\[1cm]
+    \textsc{\Large Compte Rendu Conception Orientée Objet des Systèmes de Commande}\\[1cm]
+    % Title
+    \HRule \\[0.4cm] % saut de ligne
+    { \huge  \textsc {Commande d'un Robot Mobile \\[0.4cm] }}
+
+    \HRule \\[1cm]   % sous de ligne 
+    \includegraphics[scale=0.1]{logomaster.jpg}
+    \\[1cm]
+    % Author and supervisor
+    \begin{minipage}{0.4\textwidth}
+      \begin{flushleft} \large
+         \textsc{\emph {Fait par:} \\KHERBICHE Ali\\ NAIMI Nabil}  
+          \newline
+          Promotion 2018-2019 \\
+      \end{flushleft}
+    \end{minipage}
+    \begin{minipage}{0.4\textwidth}
+      \begin{flushright} \large
+        %%\emph{Tuteur et}
+        \emph{Tuteur:} \textsc{M Pascal BERTHOU}
+      \end{flushright}
+    \end{minipage}
+    \vfill
+    % Bottom of the page
+    {\large Avril 2018}
+  \end{center}
+  \end{sffamily}                
+  \end{titlepage}  
+\makeatother
+   
+%*********************** somaire **************
+\renewcommand{\contentsname}{Sommaire}
+\tableofcontents
+%*********************** listes des figures **************
+\listoffigures
+%*********************** listes des tableaux **************
+%\listoftables
+
+\input{intro.tex}
+\input{chap1.tex}
+%\input{chap2.tex}
+%\input{chap4&5.tex}
+%\input{conclusion.tex}
+\input{annexes.tex}
+%*********************** Bibliographie ************ 
+\bibliographystyle{alpha}
+\bibliography{biblio}  
+
+\end{document}

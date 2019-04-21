@@ -1,0 +1,179 @@
+\begin{appendices}
+\chapter*{\textsc{Annexe A : MyLoopHandlerClass.h}}
+	\addcontentsline{toc}{chapter}{\textsc{Annexe A}}		
+	
+	\begin{lstlisting}	
+	 
+#pragma once
+#include "mmtimer.h"
+#include <math.h>
+#include <iostream>
+#include <fstream>
+
+class MyLoopHandlerClass :
+	public CMultimediaTimerCallback
+{
+private: 
+	int T1,Tf,T0;
+	float Vmax;
+	std::ofstream out;
+public:
+	MyLoopHandlerClass(int,int,int,float);
+public:
+	virtual ~MyLoopHandlerClass(void);
+public:
+	bool OnLoop();
+	void OnStart();
+	void Stopped ();
+	void OnStopped ();
+};
+//int MyLoopHandlerClass *T0
+
+	\end{lstlisting}
+	
+	\chapter*{\textsc{Annexe B : MyLoopHandlerClass.cpp}}
+	\addcontentsline{toc}{chapter}{\textsc{Annexe B}}		
+
+	\begin{lstlisting}	
+	 
+#include "stdafx.h"
+#include "MyLoopHandlerClass.h"
+#include "MMTimer.h"
+//#include <chrono>
+//#include <boost/thread/thread.hpp>
+using namespace std;
+
+MyLoopHandlerClass::MyLoopHandlerClass(int t0,int t1,int tf, float vmax) : out("trajectoire.txt")
+{
+	this -> T1=t1; //ms
+	this -> Tf=tf; //ms
+	this -> Vmax=vmax; // Vmax = 0.1 cm/ms
+	this -> T0=t0;
+	
+}
+
+MyLoopHandlerClass::~MyLoopHandlerClass(void)
+{
+}
+
+ bool MyLoopHandlerClass:: OnLoop (void)
+ {	
+	int t = GetTickCount()-T0-20;
+	double D,V; // distance et Vitesse 
+	
+	if (t <= T1)
+	{
+		D =  0.5*Vmax*t*t/T1; // cm
+		V= t*Vmax/T1;  
+	}
+	if((t>T1) && (t<=Tf-T1))
+	{
+		D=  0.5*Vmax*T1+Vmax*(t-T1); // cm
+		V=Vmax;
+	} 
+	if(t>Tf-T1 && t<=Tf)
+	{
+		D = 0.5*Vmax*T1+Vmax*(Tf-T1-T1)+ 0.5*Vmax/T1*((Tf-T1)*(Tf-T1)-t*t)+Vmax*Tf/T1*(t-(Tf-T1)); //cm 
+		V=-Vmax+((Vmax/(Tf-T1-Tf))*(t-Tf-T1));
+		
+	}
+	cout << t << " ms\t" << V << " cm/s\t"<< D <<"cm"<< std::endl;
+	out << t << "\t" << D << "\t" <<V << std::endl;
+
+	return true;
+}
+
+ void MyLoopHandlerClass:: OnStopped ()
+ {
+	 out.close();
+ }
+	 
+	\end{lstlisting}
+	
+	\chapter*{\textsc{Annexe B : maeva\text{\_}sql.cpp}}
+	\addcontentsline{toc}{chapter}{\textsc{Annexe B}}		
+
+	\begin{lstlisting}	
+	 
+	// maeva_sql.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include "MMTimer.h"
+#include "libRobotPekee.h"
+#include "MyLoopHandlerClass.h"
+
+using namespace std;
+
+//Declarations globales au programme
+//
+
+WRobotPekee Pekee;
+
+// -- Commenter en fonction pour selectionner le mode de commande
+// Configuration mode Simulation
+BUFFER experience="simulation sur le RSL.";
+BUFFER szRSLHostName="localhost";
+
+// Configuration mode Reel
+//BUFFER experience="commande du robot reel.";
+//BUFFER szRSLHostName="130.120.12.101";
+class  handler:public CMultimediaTimerCallback{
+public:
+	int GetTickCount (void);
+	void Sleep(unsigned int t );
+};
+
+
+int main(int argc, char* argv[])
+{
+	
+int TT1=0;
+int TTf=0;
+float VVmax;
+	printf("Coucou\n");
+	
+	cout << "Vmax = " ;
+	cin >> VVmax ;
+	cout << "t1 = " ;
+	cin >> TT1;
+	cout << "tf = ";
+	cin >> TTf;
+	// Connexion au robot
+	//
+	std::cout << "Essai de connection a " << szRSLHostName << std::endl;
+	if(Pekee.Connect(szRSLHostName))
+    {
+		std::cout << "La connexion est etablie" << std::endl;
+
+
+	  // --------------------------------- Initialisation du Timer
+		int TT0=GetTickCount();
+		MyLoopHandlerClass *handler = new MyLoopHandlerClass (TT0,TT1,TTf,VVmax);
+		CMultimediaTimer timer(*handler);
+
+		timer.Start(20,1);
+
+	  // --------------------------------- Tracage de la Position
+
+		while (!kbhit()) {Sleep(1); Pekee.SetSpeed(100,0) ;}
+ 
+	  // --------------------------------- Arret du Timer
+		
+		timer.Stop();
+
+	  // Arret de la connexion au Robot
+
+		Pekee.Disconnect();
+    }
+	else
+    {
+		std::cout << "La connexion n'a pu etre etablie." << std::endl;
+    }
+	return 0;
+}
+	 
+	\end{lstlisting}
+	
+\end{appendices}
